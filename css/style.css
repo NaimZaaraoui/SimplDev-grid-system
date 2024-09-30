@@ -9,6 +9,52 @@
  Thank you for reviewing this GRID SYSTEM mini-project, I think it's not a great system because the developer behind it is a very beginner developer(That's ME) but I hope you enjoy it. THANK YOU AND LET'S GET STARTED :)
 */
 
+:root {
+  --debug-offset: 2px;
+  --debug-style: solid;
+  --debug-color: hsl(202, 90%, 42%);
+  --debug-overlay-bg: hsl(0 0 0 / 0.8);
+  --debug-overlay-blur: 0;
+  --debug-overlay-overflow: auto;
+}
+
+/* Utils for DEBUGGING */
+[class*="debug"] {
+  outline: var(--debug-offset) var(--debug-style) var(--debug-color);
+  outline-offset: calc(var(--debug-offset) * -1 - 1);
+  z-index: 9997;
+}
+
+.debug--all {
+  &,
+  & * {
+    outline: var(--debug-offset) var(--debug-style) var(--debug-color);
+    outline-offset: calc(var(--debug-offset) * -1);
+    z-index: 9997;
+  }
+}
+
+.debug--overlay {
+  z-index: 9999;
+  background-color: hsl(0 0 100);
+}
+
+body {
+  position: relative;
+
+  &:has(.debug--overlay) {
+    overflow-y: var(--debug-overlay-overflow);
+    &::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-color: var(--debug-overlay-bg);
+      z-index: 9998;
+      backdrop-filter: blur(var(--debug-overlay-blur));
+    }
+  }
+}
+
 @layer base, grid, content;
 
 /* ------------------------ */
@@ -46,12 +92,6 @@
       [breakout-end]
       var(--min-inline-gutter)
       [breakout-end-end];
-
-    /* Some borders for Visualisation, if you want :) */
-    /* border: 5px dotted orangered;
-  > * {
-    border: 2px dashed green;
-  } */
   }
 
   /* I just have talking about this above, responsively change our content area width across different viewport sizes :) */
@@ -152,7 +192,7 @@
       /* Single column width, just used for calculating offsets, I am NOT a big fan of MATHS :) */
       --col-size: calc(
         (
-            (100% - var(--gap-col) * (var(--col-total-width) - 1)) /
+            (100% - (var(--gap-col) * (var(--col-total-width) - 1))) /
               var(--col-total-width)
           ) + var(--gap-col)
       );
@@ -1740,8 +1780,6 @@
   }
 
   .sales-points {
-    --gap: 0;
-    
     position: relative;
     padding-block: 3rem;
     background: #efefef;
@@ -1840,7 +1878,7 @@
     gap: 1rem;
     background-color: white;
     box-shadow: 0 2px 4px hsl(330, 59%, 52%, 0.15),
-    0 1px 2px hsl(202, 90%, 42%, 0.15);
+      0 1px 2px hsl(202, 90%, 42%, 0.15);
 
     > * {
       grid-column: 2 / -2;
